@@ -3,16 +3,15 @@ package main
 // imports the http-client from mingo library
 import (
 	"fmt"
+	"github.com/sidmohanty11/mingo/client"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/sidmohanty11/mingo/client"
 )
 
 var myclient = getGithubClient() // initializes the client
 
-func getGithubClient() mingo.Client {
-	client := mingo.New()
+func getGithubClient() minclient.Client {
+	client := minclient.New()
 
 	cH := make(http.Header)
 	// cH.Set("Authorization", "Bearer 123ABC")

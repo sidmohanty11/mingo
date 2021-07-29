@@ -1,4 +1,4 @@
-package mingo
+package minclient
 
 import (
 	"bytes"
