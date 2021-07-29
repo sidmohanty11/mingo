@@ -77,11 +77,11 @@ func (c *client) getHttpClient() *http.Client {
 }
 
 func (c *client) getMaxIdleConnections() int {
-	if c.maxIdleConnections > 0 {
-		return c.maxIdleConnections
+	if c.clientMaker.maxIdleConnections > 0 {
+		return c.clientMaker.maxIdleConnections
 	}
 
-	if c.disableTimeouts {
+	if c.clientMaker.disableTimeouts {
 		return 0
 	}
 	// no one configured
@@ -89,11 +89,11 @@ func (c *client) getMaxIdleConnections() int {
 }
 
 func (c *client) getResponseTimeout() time.Duration {
-	if c.responseTimeout > 0 {
-		return c.responseTimeout
+	if c.clientMaker.responseTimeout > 0 {
+		return c.clientMaker.responseTimeout
 	}
 
-	if c.disableTimeouts {
+	if c.clientMaker.disableTimeouts {
 		return 0
 	}
 	// no one configured
@@ -101,11 +101,11 @@ func (c *client) getResponseTimeout() time.Duration {
 }
 
 func (c *client) getConnectionTimeout() time.Duration {
-	if c.connectionTimeout > 0 {
-		return c.connectionTimeout
+	if c.clientMaker.connectionTimeout > 0 {
+		return c.clientMaker.connectionTimeout
 	}
 
-	if c.disableTimeouts {
+	if c.clientMaker.disableTimeouts {
 		return 0
 	}
 	// no one configured
@@ -116,7 +116,7 @@ func (c *client) getReqHeaders(reqHeaders http.Header) http.Header {
 	res := make(http.Header)
 
 	// setting common headers to the request. <<DEFAULT_HEADERS>>
-	for header, value := range c.Headers {
+	for header, value := range c.clientMaker.headers {
 		if len(value) > 0 {
 			res.Set(header, value[0])
 		}

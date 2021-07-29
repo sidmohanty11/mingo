@@ -5,20 +5,16 @@ import (
 	"fmt"
 	"github.com/sidmohanty11/mingo/client"
 	"io/ioutil"
-	"net/http"
 )
 
 var myclient = getGithubClient() // initializes the client
 
 func getGithubClient() minclient.Client {
-	client := minclient.New()
-
-	cH := make(http.Header)
-	cH.Set("Authorization", "Bearer 123ABC")
-
-	client.DisableTimeouts(true)
-
-	client.SetHeaders(cH)
+	client := minclient.
+		MakeNewClient().
+		DisableTimeouts(true).
+		SetMaxIdleConnections(5).
+		Make()
 
 	return client
 }
