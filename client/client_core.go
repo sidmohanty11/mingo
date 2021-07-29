@@ -60,19 +60,16 @@ func (c *client) do(method, url string, headers http.Header, body interface{}) (
 }
 
 func (c *client) getHttpClient() *http.Client {
-	if c.theClient != nil {
-		return c.theClient
-	}
-
-	c.theClient = &http.Client{
-		Timeout: c.getConnectionTimeout() + c.getResponseTimeout(),
-		Transport: &http.Transport{
-			MaxIdleConnsPerHost:   c.getMaxIdleConnections(),
-			ResponseHeaderTimeout: c.getResponseTimeout(),
-			DialContext:           (&net.Dialer{Timeout: c.getConnectionTimeout()}).DialContext,
-		},
-	}
-
+	c.clientOnce.Do(func() {
+		c.theClient = &http.Client{
+			Timeout: c.getConnectionTimeout() + c.getResponseTimeout(),
+			Transport: &http.Transport{
+				MaxIdleConnsPerHost:   c.getMaxIdleConnections(),
+				ResponseHeaderTimeout: c.getResponseTimeout(),
+				DialContext:           (&net.Dialer{Timeout: c.getConnectionTimeout()}).DialContext,
+			},
+		}
+	})
 	return c.theClient
 }
 

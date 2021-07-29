@@ -2,11 +2,13 @@ package minclient
 
 import (
 	"net/http"
+	"sync"
 )
 
 type client struct {
 	theClient   *http.Client
 	clientMaker *makeClient
+	clientOnce  sync.Once
 }
 
 type Client interface {
