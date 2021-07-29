@@ -1,4 +1,4 @@
-package minclient
+package mingo
 
 import (
 	"net/http"

@@ -3,14 +3,14 @@ package main
 // imports the http-client from mingo library
 import (
 	"fmt"
-	"github.com/sidmohanty11/mingo/client"
-	"io/ioutil"
+
+	mingo "github.com/sidmohanty11/mingo/client"
 )
 
-var myclient = getGithubClient() // initializes the client
+var myclient = getMingoClient() // initializes the client (singleton)
 
-func getGithubClient() minclient.Client {
-	client := minclient.
+func getMingoClient() mingo.Client {
+	client := mingo.
 		MakeNewClient().
 		DisableTimeouts(true).
 		SetMaxIdleConnections(5).
@@ -23,8 +23,7 @@ func main() {
 	getUrls()
 	getUrls()
 	getUrls()
-	u := User{"sid", "hello"}
-	postUrls(u)
+	postUrls()
 }
 
 func getUrls() {
@@ -34,10 +33,9 @@ func getUrls() {
 		panic(err)
 	}
 
-	fmt.Println(res.StatusCode)
-
-	bytes, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(string(bytes)) // res.Body
+	fmt.Println(res.Status())
+	fmt.Println(res.StatusCode())
+	fmt.Println(res.BodyAsString())
 }
 
 type User struct {
@@ -45,15 +43,15 @@ type User struct {
 	Password string `json:"-"`
 }
 
-func postUrls(user User) {
-	res, err := myclient.Post("https://api.github.com", nil, user) // basic get method
+func postUrls() {
+	u := User{Name: "sid", Password: "hello"}
+	res, err := myclient.Post("https://api.github.com", nil, u)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(res.StatusCode)
-
-	bytes, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(string(bytes)) // res.Body
+	fmt.Println(res.Status())
+	fmt.Println(res.StatusCode())
+	fmt.Println(res.BodyAsString())
 }

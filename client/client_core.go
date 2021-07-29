@@ -1,10 +1,11 @@
-package minclient
+package mingo
 
 import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
@@ -35,7 +36,7 @@ func (c *client) getReqBody(body interface{}, contentType string) ([]byte, error
 	}
 }
 
-func (c *client) do(method, url string, headers http.Header, body interface{}) (*http.Response, error) {
+func (c *client) do(method, url string, headers http.Header, body interface{}) (*Response, error) {
 	allHeaders := c.getReqHeaders(headers)
 
 	reqBody, err := c.getReqBody(body, allHeaders.Get("Content-Type"))
@@ -56,7 +57,25 @@ func (c *client) do(method, url string, headers http.Header, body interface{}) (
 
 	res, err := myclient.Do(req)
 
-	return res, err
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	rbody, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	final := Response{
+		status:     res.Status,
+		statusCode: res.StatusCode,
+		headers:    res.Header,
+		body:       rbody,
+	}
+
+	return &final, nil
 }
 
 func (c *client) getHttpClient() *http.Client {
