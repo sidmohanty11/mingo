@@ -1,10 +1,11 @@
-package client
+package mingo
 
 import (
 	"net/http"
 )
 
 type client struct {
+	Headers http.Header
 }
 
 func New() Client {
@@ -18,6 +19,11 @@ type Client interface {
 	Put(url string, headers http.Header, body interface{}) (*http.Response, error)
 	Patch(url string, headers http.Header, body interface{}) (*http.Response, error)
 	Delete(url string, headers http.Header) (*http.Response, error)
+	SetHeaders(headers http.Header)
+}
+
+func (c *client) SetHeaders(headers http.Header) {
+	c.Headers = headers
 }
 
 func (c *client) Get(url string, headers http.Header) (*http.Response, error) {
