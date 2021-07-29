@@ -14,7 +14,9 @@ func getGithubClient() minclient.Client {
 	client := minclient.New()
 
 	cH := make(http.Header)
-	// cH.Set("Authorization", "Bearer 123ABC")
+	cH.Set("Authorization", "Bearer 123ABC")
+
+	client.DisableTimeouts(true)
 
 	client.SetHeaders(cH)
 
