@@ -45,6 +45,10 @@ func (c *client) do(method, url string, headers http.Header, body interface{}) (
 		return nil, err
 	}
 
+	if mock := mockSrv.getMock(method, url, string(reqBody)); mock != nil {
+		return mock.GetResponse()
+	}
+
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(reqBody))
 
 	if err != nil {
