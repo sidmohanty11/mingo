@@ -4,18 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"testing"
 
-	mingo "github.com/sidmohanty11/mingo/client"
+	mingo "github.com/sidmohanty11/mingo"
 )
 
-func TestMain(m *testing.M) {
-	fmt.Println("Let's start testing!!!")
-	mingo.StartMockServer()
-	os.Exit(m.Run())
-}
+// func TestMain(m *testing.M) {
+// 	fmt.Println("Let's start testing!!!")
+// 	mingo.StartMockServer()
+// 	os.Exit(m.Run())
+// }
 
 func TestGet(t *testing.T) {
 	t.Run("testerrfetching", func(t *testing.T) {
