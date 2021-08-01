@@ -6,15 +6,15 @@ import (
 	mingo "github.com/sidmohanty11/mingo"
 )
 
-var httpClient = mingo.MakeNewClient().Make()
+var m = mingo.MakeNewClient().Make()
 
 type Endpoints struct {
-	EmailsUrl string `json:"emails_url"`
+	EventsUrl string `json:"events_url"`
 	EmojisUrl string `json:"emojis_url"`
 }
 
 func GetEndp() (*Endpoints, error) {
-	res, err := httpClient.Get("https://api.github.com", nil)
+	res, err := m.Get("https://api.github.com", nil)
 
 	if err != nil {
 		return nil, err
