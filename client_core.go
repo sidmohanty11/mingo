@@ -12,13 +12,6 @@ import (
 	"time"
 )
 
-// default values of some constants
-const (
-	defaultMaxIdleConnections = 10
-	defaultResponseTimeout    = 10 * time.Second
-	defaultConnectionTimeout  = 10 * time.Second
-)
-
 // returns the body as json/xml as referred in content-type header
 // the default is json format
 func (c *client) getReqBody(body interface{}, contentType string) ([]byte, error) {
@@ -28,10 +21,10 @@ func (c *client) getReqBody(body interface{}, contentType string) ([]byte, error
 
 	// by default we assume body is json
 	switch strings.ToLower(contentType) {
-	case "application/json":
+	case CONTENT_TYPE_JSON:
 		return json.Marshal(body)
 
-	case "application/xml":
+	case CONTENT_TYPE_XML:
 		return xml.Marshal(body)
 
 	default:
@@ -46,7 +39,7 @@ func (c *client) do(method, url string, body interface{}, headers http.Header) (
 	allHeaders := c.getReqHeaders(headers)
 
 	// gets the request body or any error (json/xml)
-	reqBody, err := c.getReqBody(body, allHeaders.Get("Content-Type"))
+	reqBody, err := c.getReqBody(body, allHeaders.Get(HEADER_CONTENT_TYPE))
 
 	if err != nil {
 		return nil, err
@@ -136,7 +129,7 @@ func (c *client) getMaxIdleConnections() int {
 		return 0
 	}
 	// no one configured
-	return defaultMaxIdleConnections
+	return DEFAULT_MAX_IDLE_CONNECTIONS
 }
 
 // gets the max response timeout as time.Duration
@@ -150,7 +143,7 @@ func (c *client) getResponseTimeout() time.Duration {
 		return 0
 	}
 	// no one configured
-	return defaultResponseTimeout
+	return DEFAULT_RESPONSE_TIMEOUT
 }
 
 // gets the max connection timeout as time.Duration
@@ -164,5 +157,5 @@ func (c *client) getConnectionTimeout() time.Duration {
 		return 0
 	}
 	// no one configured
-	return defaultConnectionTimeout
+	return DEFAULT_CONNECTION_TIMEOUT
 }

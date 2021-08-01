@@ -14,6 +14,7 @@ type MakeClient interface {
 	SetMaxIdleConnections(i int) MakeClient
 	DisableTimeouts(b bool) MakeClient
 	SetHttpClient(c *http.Client) MakeClient
+	SetUserAgent(userAgent string) MakeClient
 	Make() Client
 }
 
@@ -26,6 +27,7 @@ type makeClient struct {
 	responseTimeout    time.Duration
 	disableTimeouts    bool
 	client             *http.Client
+	userAgent          string
 }
 
 // MakeNewClient initializes the makeClient struct which now has all the methods
@@ -86,5 +88,11 @@ func (c *makeClient) DisableTimeouts(b bool) MakeClient {
 // so this sets client to the client you pass in
 func (c *makeClient) SetHttpClient(client *http.Client) MakeClient {
 	c.client = client
+	return c
+}
+
+// sets the user agent, which can be used in headers when making requests
+func (c *makeClient) SetUserAgent(userAgent string) MakeClient {
+	c.userAgent = userAgent
 	return c
 }

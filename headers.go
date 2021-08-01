@@ -28,5 +28,13 @@ func (c *client) getReqHeaders(reqHeaders http.Header) http.Header {
 		}
 	}
 
+	if c.clientMaker.userAgent != "" {
+		if res.Get(HEADER_USER_AGENT) != "" {
+			return res
+		}
+		// sets user-agent if it is not defined
+		res.Set(HEADER_USER_AGENT, c.clientMaker.userAgent)
+	}
+
 	return res
 }
