@@ -14,7 +14,7 @@ type Endpoints struct {
 }
 
 func GetEndp() (*Endpoints, error) {
-	res, err := m.Get("https://api.github.com", nil)
+	res, err := m.Get("https://api.github.com")
 
 	if err != nil {
 		return nil, err

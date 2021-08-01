@@ -8,7 +8,7 @@ type url struct {
 }
 
 func Get() (*url, error) {
-	res, err := httpClient.Get("https://api.github.com", nil)
+	res, err := httpClient.Get("https://api.github.com")
 
 	if err != nil {
 		return nil, err

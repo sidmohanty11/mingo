@@ -13,6 +13,6 @@ func TestPost(t *testing.T) {
 	repo := Repository{
 		Name: "hello",
 	}
-	res, err := httpClient.Post("", nil, repo)
+	res, err := httpClient.Post("", repo, nil)
 	fmt.Println(res, err)
 }

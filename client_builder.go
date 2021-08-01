@@ -11,6 +11,7 @@ type MakeClient interface {
 	SetResponseTimeout(timeout time.Duration) MakeClient
 	SetMaxIdleConnections(i int) MakeClient
 	DisableTimeouts(b bool) MakeClient
+	SetHttpClient(c *http.Client) MakeClient
 	Make() Client
 }
 
@@ -20,6 +21,8 @@ type makeClient struct {
 	connectionTimeout  time.Duration
 	responseTimeout    time.Duration
 	disableTimeouts    bool
+	client             *http.Client
+	baseURL            string
 }
 
 func MakeNewClient() MakeClient {
@@ -59,5 +62,10 @@ func (c *makeClient) SetMaxIdleConnections(i int) MakeClient {
 // false by default
 func (c *makeClient) DisableTimeouts(b bool) MakeClient {
 	c.disableTimeouts = b
+	return c
+}
+
+func (c *makeClient) SetHttpClient(client *http.Client) MakeClient {
+	c.client = client
 	return c
 }

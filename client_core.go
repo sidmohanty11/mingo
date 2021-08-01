@@ -36,7 +36,7 @@ func (c *client) getReqBody(body interface{}, contentType string) ([]byte, error
 	}
 }
 
-func (c *client) do(method, url string, headers http.Header, body interface{}) (*Response, error) {
+func (c *client) do(method, url string, body interface{}, headers http.Header) (*Response, error) {
 	allHeaders := c.getReqHeaders(headers)
 
 	reqBody, err := c.getReqBody(body, allHeaders.Get("Content-Type"))
@@ -84,6 +84,10 @@ func (c *client) do(method, url string, headers http.Header, body interface{}) (
 
 func (c *client) getHttpClient() *http.Client {
 	c.clientOnce.Do(func() {
+		if c.clientMaker.client != nil {
+			c.theClient = c.clientMaker.client
+			return
+		}
 		c.theClient = &http.Client{
 			Timeout: c.getConnectionTimeout() + c.getResponseTimeout(),
 			Transport: &http.Transport{
@@ -130,24 +134,4 @@ func (c *client) getConnectionTimeout() time.Duration {
 	}
 	// no one configured
 	return defaultConnectionTimeout
-}
-
-func (c *client) getReqHeaders(reqHeaders http.Header) http.Header {
-	res := make(http.Header)
-
-	// setting common headers to the request. <<DEFAULT_HEADERS>>
-	for header, value := range c.clientMaker.headers {
-		if len(value) > 0 {
-			res.Set(header, value[0])
-		}
-	}
-
-	// setting custom headers to the request.
-	for key, value := range reqHeaders {
-		if len(value) > 0 {
-			res.Set(key, value[0])
-		}
-	}
-
-	return res
 }
