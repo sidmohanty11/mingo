@@ -4,17 +4,22 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
 	mingo "github.com/sidmohanty11/mingo/client"
 )
 
-func TestGet(t *testing.T) {
+func TestMain(m *testing.M) {
+	fmt.Println("Let's start testing!!!")
 	mingo.StartMockServer()
-	Get()
+	os.Exit(m.Run())
+}
 
+func TestGet(t *testing.T) {
 	t.Run("testerrfetching", func(t *testing.T) {
+		mingo.FlushMocks() // clean all of the prev mocks or flushes it.
 		mock := mingo.Mock{
 			Method: http.MethodGet,
 			Url:    "https://api.github.com",

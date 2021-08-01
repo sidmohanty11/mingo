@@ -1,6 +1,12 @@
 package mingo
 
-import "sync"
+import (
+	"crypto/md5"
+	"encoding/hex"
+	"errors"
+	"strings"
+	"sync"
+)
 
 var mockSrv = mockServer{
 	mocks: make(map[string]*Mock),
@@ -32,9 +38,38 @@ func AddMock(mock Mock) {
 }
 
 func (m *mockServer) getMockKey(method, url, body string) string {
-	return method + url + body
+	hasher := md5.New()
+	hasher.Write([]byte(method + url + m.cleanBody(body)))
+	key := hex.EncodeToString(hasher.Sum(nil))
+	return key
+}
+
+func (m *mockServer) cleanBody(body string) string {
+	body = strings.TrimSpace(body)
+	if body == "" {
+		return ""
+	}
+	body = strings.ReplaceAll(body, "\t", "")
+	return body
 }
 
 func (m *mockServer) getMock(method, url, body string) *Mock {
-	return m.mocks[m.getMockKey(method, url, body)]
+	if !m.enabled {
+		return nil
+	}
+
+	if mock := m.mocks[m.getMockKey(method, url, body)]; mock != nil {
+		return mock
+	}
+
+	return &Mock{
+		Error: errors.New("no mock matching"),
+	}
+}
+
+func FlushMocks() {
+	mockSrv.serverMutex.Lock()
+	defer mockSrv.serverMutex.Unlock()
+
+	mockSrv.mocks = make(map[string]*Mock)
 }
