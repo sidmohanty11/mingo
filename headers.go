@@ -10,6 +10,7 @@ func attachHeaders(headers ...http.Header) http.Header {
 	return http.Header{}
 }
 
+// gets all the request headers, both default headers and custom headers
 func (c *client) getReqHeaders(reqHeaders http.Header) http.Header {
 	res := make(http.Header)
 
