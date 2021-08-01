@@ -3,7 +3,7 @@ package examples
 import (
 	"time"
 
-	mingo "github.com/sidmohanty11/mingo/client"
+	mingo "github.com/sidmohanty11/mingo"
 )
 
 var httpClient = getClient()
