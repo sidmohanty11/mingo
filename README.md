@@ -1,7 +1,7 @@
 # Mingo
 ![mingo-httpclient](https://user-images.githubusercontent.com/73601258/127781760-f4c5b525-024f-40dd-9b02-8941861b03b3.jpg)
-![madeingo](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 *A minimal yet powerful HTTP client implemented in go (inspired by axios).*
+![madeingo](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ### Usage
 Install mingo,
 
